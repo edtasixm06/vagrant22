@@ -32,7 +32,8 @@ sudo apt-get -y install vim vim-gtk3 mc geany aptitude tree git openssh-server
 sudo apt-get -y purge gnome-games 
 sudo apt-get -y autoremove 
 # pendent: eliminar pregunta interactiva
-sudo apt-get -y install krb5-user krb5-multidev libpam-mount sssd nfs-common autofs ufw curl 
+sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -y install krb5-user"
+sudo apt-get -y install krb5-multidev libpam-mount sssd nfs-common autofs ufw curl 
 git clone https://gitlab.com/manelmellado/ubnt-at-inf.git
 #cd ubnt-at-inf/Debian\ 11/arxius/etc/
 sudo cp ubnt-at-inf/Debian\ 11/arxius/etc/sssd/sssd.conf /etc/sssd/
@@ -61,4 +62,15 @@ sudo apt-mark hold linux-headers-$(uname -r) # per apt-get
 sudo aptitude hold linux-headers-$(uname -r) # per aptitude
 #sed -i 's/\#WaylandEnable=false/WaylandEnable=false/' /etc/gdm3/daemon.conf
 SCRIPT
+
+
+# Valors obtinguts amb: (package debconf-utils)
+# $ sudo debconf-get-selections | grep krb5
+#krb5-config	krb5-config/add_servers_realm	string
+#krb5-config	krb5-config/admin_server	string
+# Add locations of default Kerberos servers to /etc/krb5.conf?
+#krb5-config	krb5-config/add_servers	boolean	false
+#krb5-config	krb5-config/read_conf	boolean	true
+#krb5-config	krb5-config/kerberos_servers	string
+#krb5-config	krb5-config/default_realm	string
 
