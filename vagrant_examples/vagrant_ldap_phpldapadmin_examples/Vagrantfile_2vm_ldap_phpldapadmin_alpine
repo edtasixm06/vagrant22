@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
     ldap.vm.box = "generic/alpine38"
     ldap.vm.network "public_network", bridge: "enp1s0"
     ldap.vm.network "forwarded_port", guest: 389, host: 2389
-    ldap.vm.provision "shell", inline: $install_script_alpine
+    ldap.vm.provision "shell", inline: $install_ldap_script_alpine
   end
 
   config.vm.define "phpldapadmin" do |pla|
@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
 
 end
 
-$install_script_alpine = <<SCRIPT
+$install_ldap_script_alpine = <<SCRIPT
 sudo apk add openldap openldap-back-mdb openldap-back-monitor
 sudo rm -rf /etc/openldap/slapd.d/*
 sudo rm -rf /var/lib/openldap/*
@@ -47,10 +47,16 @@ SCRIPT
 
 
 $install_phpldapadmin_script_alpine = <<SCRIPT
-sudo apk add  apache2 php-xml phpldapadmin
+sudo apk update
+# nota: cal insta·lar php5-aache2 perquè phpldapadmin l'utilitza 
+# i no el php7-apach2 (no: php$phpverx-apache2)
+sudo apk add apache2  php5-apache2 phpldapadmin
 sudo cp /vagrant/phpldapadmin/phpldapadmin_alpine.conf /etc/apache2/conf.d/phpldapadmin.conf
 sudo cp /vagrant/phpldapadmin/config.php  /etc/phpldapadmin/config.php
+sudo chgrp apache /etc/phpldapadmin/config.php
+# Atenció, cal editar postgeriorment el /etc/hots i posar l'adreça IP de la VM ldap
 sudo bash -c "echo 192.168.1.41 ldap.edt.org >> /etc/hosts"
+#sudo sed -i 's/alpine38.localdomain/alpine38.localdomain ldap.edt.org/' /etc/hosts
 sudo service apache2 start
 SCRIPT
 

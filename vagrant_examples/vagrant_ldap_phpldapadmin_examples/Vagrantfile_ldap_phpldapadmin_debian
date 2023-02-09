@@ -1,0 +1,75 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  #box settings
+  config.vm.box = "debian/bullseye64"
+  #config.vm.box = "generic/alpine38"
+
+  #provider settings
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 4096
+    vb.cpus = 2
+  end
+  
+  #network settings
+  #config.vm.network "private_network", ip: "192.68.33.10"
+  config.vm.network "public_network", bridge: "enp1s0"
+  config.vm.network "forwarded_port", guest: 389, host: 2389
+  config.vm.network "forwarded_port", guest: 80, host: 2080
+  
+  #folder settings 
+  #config.vm.synced_folder "./html/", "/var/www/html", :mount_options => ["dmode=777","fmode=666"]
+  
+  #provision settings
+  #config.vm.provision "shell", path: "install.sh"
+  config.vm.provision "shell", inline: $install_script_debian
+  config.vm.provision "shell", inline: $install_phpldapadmin_script_debian
+
+end
+
+
+$install_script_debian = <<SCRIPT
+# Update Packages
+apt-get update
+# Upgrade Packages
+apt-get upgrade
+
+# set slapd pass
+debconf-set-selections <<< 'slapd slapd/root_password password jupiter'
+debconf-set-selections <<< 'slapd slapd/root_password_again password jupiter'
+
+DEBIAN_FRONTEND=noninteractive apt-get -y install slapd
+apt-get install -y ldap-utils
+rm -rf /etc/ldap/slapd.d/*
+rm -rf /var/lib/ldap/*
+cp /vagrant/ldap/DB_CONFIG /var/lib/ldap/.
+slaptest -Q -f /vagrant/ldap/slapd.conf -F /etc/ldap/slapd.d &> /dev/null
+slapadd -F /etc/ldap/slapd.d -l /vagrant/ldap/edt.org.ldif
+chown -R openldap.openldap /etc/ldap/slapd.d
+chown -R openldap.openldap /var/lib/ldap
+cp /vagrant/ldap/ldap.conf /etc/ldap/ldap.conf
+sudo service slapd start
+sudo service slapd restart
+SCRIPT
+
+
+$install_phpldapadmin_script_debian = <<SCRIPT
+sudo apt-get update
+sudo apt-get -y install php-xml apache2
+wget http://ftp.de.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.2_all.deb
+#sudo apt-get -y install http://ftp.de.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.2_all.deb
+sudo apt-get -y install ./phpldapadmin_1.2.6.3-0.2_all.deb
+sudo rm phpldapadmin_1.2.6.3-0.2_all.deb
+sudo cp /vagrant/phpldapadmin/phpldapadmin.conf /etc/apache2/conf-enabled/phpldapadmin.conf
+sudo cp /vagrant/phpldapadmin/config.php  /etc/phpldapadmin/config.php
+# Si es vol configurar per ip modificar la ip i desocmentar i comentar el sed de localhost
+#sudo bash -c "echo 192.168.1.41 ldap.edt.org >> /etc/hosts"
+sudo sed -i 's/localhost/localhost ldap.edt.org/' /etc/hosts
+sudo systemctl start apache2
+SCRIPT
+
+# Des d'un altre host connectar al port 2080 (propagat) o al 80 de la vm
+# # localhost:280/phpldapadmin
+# # <ip-vm-phpldapadmin>:80/phpldapadmin
+
