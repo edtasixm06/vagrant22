@@ -1,0 +1,60 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  #box settings
+  #config.vm.box = "debian/bullseye64"
+  #config.vm.box = "generic/alpine38"
+  config.vm.synced_folder ".", "/vagrant" 
+
+  #provider settings
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 4096
+    vb.cpus = 2
+  end
+
+  config.vm.define "ldap" do |ldap|
+    ldap.vm.box = "generic/alpine38"
+    ldap.vm.network "public_network", bridge: "enp1s0"
+    ldap.vm.network "forwarded_port", guest: 389, host: 2389
+    ldap.vm.provision "shell", inline: $install_script_alpine
+  end
+
+  config.vm.define "phpldapadmin" do |pla|
+    pla.vm.box = "generic/alpine38"
+    pla.vm.network "public_network", bridge: "enp1s0"
+    pla.vm.network "forwarded_port", guest: 80, host: 2080
+    pla.vm.provision "shell", inline: $install_phpldapadmin_script_alpine
+  end 
+
+end
+
+$install_script_alpine = <<SCRIPT
+sudo apk add openldap openldap-back-mdb openldap-back-monitor
+sudo rm -rf /etc/openldap/slapd.d/*
+sudo rm -rf /var/lib/openldap/*
+sudo cp /etc/openldap/DB_CONFIG.example /var/lib/openldap/.
+#sudo slaptest -Q -f /vagrant/ldap/slapd_alpine.conf -F /etc/openldap/slapd.d &> /dev/null
+#sudo slapadd -F /etc/ldap/slapd.d -l /vagrant/ldap/edt.org.ldif
+sudo cp /vagrant/ldap/slapd_alpine.conf /etc/openldap/slapd.conf
+sudo slapadd -l /vagrant/ldap/edt.org.ldif
+sudo chown -R ldap.ldap /etc/openldap/slapd.d
+sudo chown -R ldap.ldap /var/lib/openldap
+sudo cp /vagrant/ldap/ldap.conf /etc/openldap/ldap.conf
+sudo service slapd start
+sudo service slapd restart
+SCRIPT
+
+
+$install_phpldapadmin_script_alpine = <<SCRIPT
+sudo apk add  apache2 php-xml phpldapadmin
+sudo cp /vagrant/phpldapadmin/phpldapadmin_alpine.conf /etc/apache2/conf.d/phpldapadmin.conf
+sudo cp /vagrant/phpldapadmin/config.php  /etc/phpldapadmin/config.php
+sudo bash -c "echo 192.168.1.41 ldap.edt.org >> /etc/hosts"
+sudo service apache2 start
+SCRIPT
+
+# Des d'un altre host connectar al port 2080 (propagat) o al 80 de la vm 
+# # localhost:280/phpldapadmin
+# # <ip-vm-phpldapadmin>:80/phpldapadmin
+

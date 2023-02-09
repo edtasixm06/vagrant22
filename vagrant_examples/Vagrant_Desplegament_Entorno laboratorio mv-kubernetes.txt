@@ -1,0 +1,65 @@
+VirtualBox/vagrant
+##Tener instalado las ultiamas versiones:
+
+vagrant 
+https://www.vagrantup.com/downloads
+
+virtualbox
+https://www.virtualbox.org/wiki/Downloads
+
+##Boxes que son las mv de vagrant creadas para virtualbox
+
+https://app.vagrantup.com/boxes/search
+-------------------------------------------------------------------------------------------------------------------------------------
+
+c:\mv-kubernetes-2020
+vagrant up
+
+
+VirtualBox Host-Only Network -->10.0.0.1/24
+
+master-->10.0.0.10
+worker1-->10.0.0.11
+worker2-->10.0.0.12
+
+usuario: vagrant
+pass: vagrant
+
+usurio:root
+pass: vagrant
+----------------------------------------------------------------------------
+##Para trabajar en el cluster sobre el nodo master con el usuario vagrant.
+
+vagrant ssh master
+
+
+vagrant@master:~$ kubectl get nodes
+NAME      STATUS   ROLES    AGE    VERSION
+master    Ready    master   321d   v1.13.5
+worker1   Ready    <none>   321d   v1.13.5
+worker2   Ready    <none>   321d   v1.13.5
+
+
+watch kubectl get pod --all-namespaces  -o wide
+---------------------------------------------------------------------------
+##Entorno de PUE kubernetes:
+yum install git -y
+cd /
+
+git clone https://github.com/agarciafer/kubernetes.git
+
+cd /kubernetes
+vagrant up
+
+vagrant ssh master
+ssh vagrant@10.0.0.10
+
+
+
+cd /vagrant
+sudo apt-get install unzip
+
+sudo unzip kubernetes-curso.zip
+sudo unzip k8-for-devs-master.zip
+sudo unzip kubernetes-labs2.zip
+

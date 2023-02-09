@@ -1,0 +1,46 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  #box settings
+  config.vm.box = "debian/bullseye64"
+  #config.vm.box = "generic/alpine38"
+
+  #provider settings
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 4096
+    vb.cpus = 2
+  end
+  
+  #network settings
+  #config.vm.network "private_network", ip: "192.68.33.10"
+  config.vm.network "public_network", bridge: "enp1s0"
+  config.vm.network "forwarded_port", guest: 80, host: 2080
+
+  
+  #folder settings 
+  #config.vm.synced_folder "./html/", "/var/www/html", :mount_options => ["dmode=777","fmode=666"]
+  
+  #provision settings
+  #config.vm.provision "shell", path: "install.sh"
+  config.vm.provision "shell", inline: $install_phpldapadmin_script_debian
+end
+
+#$ldap_ip = "192.168.1.41"
+$install_phpldapadmin_script_debian = <<SCRIPT
+sudo apt-get update
+sudo apt-get -y install php-xml apache2
+wget http://ftp.de.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.2_all.deb
+#sudo apt-get -y install http://ftp.de.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.2_all.deb
+sudo apt-get -y install ./phpldapadmin_1.2.6.3-0.2_all.deb
+sudo cp /vagrant/phpldapadmin/phpldapadmin.conf /etc/apache2/conf-enabled/phpldapadmin.conf
+sudo cp /vagrant/phpldapadmin/config.php  /etc/phpldapadmin/config.php
+sudo bash -c "echo 192.168.1.41 ldap.edt.org >> /etc/hosts"
+sudo bash -c "echo $ldap_ip ldap.edt.org" >> /tmp/hosts
+sudo systemctl start apache2
+SCRIPT
+
+# Des d'un altre host connectar al port 2080 (propagat) o al 80 de la vm 
+# # localhost:280/phpldapadmin
+# # <ip-vm-phpldapadmin>:80/phpldapadmin
+
