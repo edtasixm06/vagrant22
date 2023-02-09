@@ -40,7 +40,7 @@ sudo cp ubnt-at-inf/Debian\ 11/arxius/etc/sssd/sssd.conf /etc/sssd/
 sudo cp ubnt-at-inf/Debian\ 11/arxius/etc/sudoers.d/inf /etc/sudoers.d/
 sudo chmod 600 /etc/sssd/sssd.conf
 # pendent: eliminar pregunta interactiva
-sudo pam-auth-update
+sudo pam-auth-update --enable mkhomedir
 sudo systemctl disable sssd-nss.socket
 sudo systemctl disable sssd-autofs.socket
 sudo systemctl restart sssd
