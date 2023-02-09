@@ -4,29 +4,28 @@
 Vagrant.configure("2") do |config|
   #box settings
   #config.vm.box = "debian/bullseye64"
-  #config.vm.box = "generic/alpine38"
-  config.vm.synced_folder ".", "/vagrant" 
+  config.vm.box = "generic/alpine38"
 
   #provider settings
   config.vm.provider "virtualbox" do |vb|
     vb.memory = 4096
     vb.cpus = 2
   end
-
-  config.vm.define "ldap" do |ldap|
-    ldap.vm.box = "generic/alpine38"
-    ldap.vm.network "public_network", bridge: "enp1s0"
-    ldap.vm.network "forwarded_port", guest: 389, host: 2389
-    ldap.vm.provision "shell", inline: $install_ldap_script_alpine
-  end
-
-  config.vm.define "phpldapadmin" do |pla|
-    pla.vm.box = "generic/alpine38"
-    pla.vm.network "public_network", bridge: "enp1s0"
-    pla.vm.network "forwarded_port", guest: 80, host: 2080
-    pla.vm.provision "shell", inline: $install_phpldapadmin_script_alpine
-  end 
-
+  
+  #network settings
+  #config.vm.network "private_network", ip: "192.68.33.10"
+  config.vm.network "public_network", bridge: "enp1s0"
+  config.vm.network "forwarded_port", guest: 389, host: 2389
+  config.vm.network "forwarded_port", guest: 80, host: 2080
+  
+  #folder settings 
+  #config.vm.synced_folder "./html/", "/var/www/html", :mount_options => ["dmode=777","fmode=666"]
+  config.vm.synced_folder ".", "/vagrant" 
+ 
+  #provision settings
+  #config.vm.provision "shell", path: "install.sh"
+  config.vm.provision "shell", inline: $install_ldap_script_alpine
+  config.vm.provision "shell", inline: $install_phpldapadmin_script_alpine
 end
 
 $install_ldap_script_alpine = <<SCRIPT
@@ -38,13 +37,16 @@ sudo cp /etc/openldap/DB_CONFIG.example /var/lib/openldap/.
 #sudo slapadd -F /etc/ldap/slapd.d -l /vagrant/ldap/edt.org.ldif
 sudo cp /vagrant/ldap/slapd_alpine.conf /etc/openldap/slapd.conf
 sudo slapadd -l /vagrant/ldap/edt.org.ldif
-sudo chown -R ldap.ldap /etc/openldap/slapd.d
+#sudo chown -R ldap.ldap /etc/openldap/slapd.d
 sudo chown -R ldap.ldap /var/lib/openldap
 sudo cp /vagrant/ldap/ldap.conf /etc/openldap/ldap.conf
 sudo service slapd start
 sudo service slapd restart
 SCRIPT
 
+# En el host amfitrió per verificar que funciona ldap:
+# ldapsearch -x -LLL -H ldap://localhost:2389 -b 'dc=edt,dc=org'
+# ldapsearch -x -LLL -h <ip-vm> -b 'dc0edt,dc=org'
 
 $install_phpldapadmin_script_alpine = <<SCRIPT
 sudo apk update
@@ -54,13 +56,17 @@ sudo apk add apache2  php5-apache2 phpldapadmin
 sudo cp /vagrant/phpldapadmin/phpldapadmin_alpine.conf /etc/apache2/conf.d/phpldapadmin.conf
 sudo cp /vagrant/phpldapadmin/config.php  /etc/phpldapadmin/config.php
 sudo chgrp apache /etc/phpldapadmin/config.php
-# Atenció, cal editar postgeriorment el /etc/hots i posar l'adreça IP de la VM ldap
-sudo bash -c "echo 192.168.1.41 ldap.edt.org >> /etc/hosts"
-#sudo sed -i 's/alpine38.localdomain/alpine38.localdomain ldap.edt.org/' /etc/hosts
+# Repassar el mecanisme d'assignació del nom ldap.edt.org al host local
+#sudo bash -c "echo 192.168.1.41 ldap.edt.org >> /etc/hosts"
+sudo sed -i 's/alpine38.localdomain/alpine38.localdomain ldap.edt.org/' /etc/hosts
 sudo service apache2 start
 SCRIPT
 
+# Verificar php: echo "<?php phpinfo(); ?>" /var/www/localhost/htdocs/index.php
 # Des d'un altre host connectar al port 2080 (propagat) o al 80 de la vm 
 # # localhost:280/phpldapadmin
 # # <ip-vm-phpldapadmin>:80/phpldapadmin
+
+
+
 
