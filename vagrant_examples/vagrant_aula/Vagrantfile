@@ -36,11 +36,14 @@ sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -y install krb5-use
 sudo apt-get -y install krb5-multidev libpam-mount sssd nfs-common autofs ufw curl 
 git clone https://gitlab.com/manelmellado/ubnt-at-inf.git
 #cd ubnt-at-inf/Debian\ 11/arxius/etc/
-sudo cp ubnt-at-inf/Debian\ 11/arxius/etc/sssd/sssd.conf /etc/sssd/
-sudo cp ubnt-at-inf/Debian\ 11/arxius/etc/sudoers.d/inf /etc/sudoers.d/
+sudo cp "ubnt-at-inf/Debian 11/arxius/etc/sssd/sssd.conf" /etc/sssd/
+sudo cp "ubnt-at-inf/Debian 11/arxius/etc/sudoers.d/inf" /etc/sudoers.d/
 sudo chmod 600 /etc/sssd/sssd.conf
+sudo ls -l /etc/sssd
+sudo ls -l /etc/sudoers.d
+sudo rm -rf ubnt-at-inf
 # pendent: eliminar pregunta interactiva
-sudo pam-auth-update --enable mkhomedir
+sudo pam-auth-update --enable mkhomedir sss systemd pwquality unix libpam-mount
 sudo systemctl disable sssd-nss.socket
 sudo systemctl disable sssd-autofs.socket
 sudo systemctl restart sssd
