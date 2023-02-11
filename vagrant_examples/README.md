@@ -35,4 +35,5 @@
  * **Vagrant_3_mv_lpic2** exemple de desplegament d'un laboratori per 
    impartir lpic2.
 
- * 
+ * **Vagrant_Desplegament_Entorno_laboratorio_mv-kubernetes.txt** explicacions 
+   per implementar el laboratori de kubernetes amb vagrant.
