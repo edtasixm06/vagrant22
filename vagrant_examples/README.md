@@ -35,4 +35,4 @@
  * **Vagrant_3_mv_lpic2** exemple de desplegament d'un laboratori per 
    impartir lpic2.
 
-
+ * 
