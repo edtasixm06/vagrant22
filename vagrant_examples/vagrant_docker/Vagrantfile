@@ -37,15 +37,18 @@ Vagrant.configure("2") do |config|
     d.pull_images "edtasixm06/ssh22:base"
     d.pull_images "edtasixm06/samba22:homes"
     
+    #d.post_install_provision "shell", inline:"echo export http_proxy='http://127.0.0.1:3128/' >> /etc/default/docker"
+    d.post_install_provision "shell", inline: "docker network create 2hisx"
+
     #docker run --rm --name ldap.edt.org -h ldap.edt.org --net 2hisx -p 389:389 -d edtasixm06/ldap22:latest
-    d.run  "edtasixm06/ldap22:latest",  auto_assign_name: "false", args: " --name ldap.edt.org -h ldap.edt.org -p 389:389"
+    d.run  "ldap.edt.org", image: "edtasixm06/ldap22:latest",  auto_assign_name: "false", args: " --name ldap.edt.org -h ldap.edt.org --net 2hisx -p 389:389"
     #docker run --rm --name phpldapadmin.edt.org -h phpldapadmin.edt.org --net 2hisx -p 80:80 -d edtasixm06/ldap22:phpldapadmin
-    d.run "edtasixm06/ldap22:phpldapadmin", auto_assign_name: "false", args: "--name phpldapadmin.edt.org \
+    d.run "edtasixm06/ldap22:phpldapadmin", auto_assign_name: "false", args: "--name phpldapadmin.edt.org --net 2hisx \
            -h phpldapadmin.edt.org -p 80:80"
     #docker run --rm --name ssh.edt.org -h ssh.edt.org --net 2hisx -p 2022:22 -d edtasixm06/ssh22:base
-    d.run "edtasixm06/ssh22:base", auto_assign_name: "false", args: "--name ssh.edt.org -h ssh.edt.org -p 2022:22"
+    d.run "edtasixm06/ssh22:base", auto_assign_name: "false", args: "--name ssh.edt.org -h ssh.edt.org --net 2hisx -p 2022:22"
     #docker run --rm --name samba.edt.org -h samba.edt.org --net 2hisx -p 139:139 -p 445:445 --privileged -d edtasixm06/samba22:homes
-    d.run "edtasixm06/samba22:homes",  auto_assign_name: "false", args:  "--name samba.edt.org -h samba.edt.org \
+    d.run "edtasixm06/samba22:homes",  auto_assign_name: "false", args:  "--name samba.edt.org --net 2hisx -h samba.edt.org \
          -p 139:139 -p 445:445 --privileged"
   end
 
