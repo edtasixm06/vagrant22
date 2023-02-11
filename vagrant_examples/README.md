@@ -21,6 +21,10 @@
    de xarxa diferents per observar xarxes públiques i privades i amb 
    adreça ip estàtica o dinàmica.
 
+ * **vagrant_docker** exemple de desplegament d'una VM que utilitza 
+   provisioning docker per descarregar imatges docker i posar-les en
+   funcionament (no utilitza shell scripting).
+
 #### Altres
 
  * **Vagrant_1_kubernetes_lab** exemple de desplegment d'un laboratori
