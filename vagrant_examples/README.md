@@ -25,6 +25,9 @@
    provisioning docker per descarregar imatges docker i posar-les en
    funcionament (no utilitza shell scripting).
 
+ * **alpine_examples** exemples de desplegaments alpine i de pràctiues 
+   de reptes edt.
+   
 #### Altres
 
  * **Vagrant_1_kubernetes_lab** exemple de desplegment d'un laboratori

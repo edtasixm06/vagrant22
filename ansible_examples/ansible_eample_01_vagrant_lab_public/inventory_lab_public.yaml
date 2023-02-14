@@ -1,0 +1,18 @@
+servernet:
+  hosts:
+    server:
+      ansible_host: 192.168.1.55
+
+workersnet:
+  hosts:
+    worker1:
+      ansible_host: 192.168.1.46
+    worker2:
+      ansible_host: 192.168.1.47
+    worker3:
+      ansible_host: 192.168.1.50
+
+vagrantlabpublic:
+  children:
+    servernet:
+    workersnet:  

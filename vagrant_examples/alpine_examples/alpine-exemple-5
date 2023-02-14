@@ -1,0 +1,17 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/alpine38"
+  config.vm.synced_folder ".", "/vagrant_data"
+  config.vm.provision "shell", inline: "echo Hello this is my VM $(uname -a); cat /etc/os-release"
+  config.vm.provision "shell", inline: "ls -la /vagrant_data"
+  config.vm.provision :shell, path: "edt-script-1.sh"
+  config.vm.network :forwarded_port, guest: 80, host: 4567
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+  # config.vm.network "public_network"
+
+end
+
