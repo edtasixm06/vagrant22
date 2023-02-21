@@ -1,0 +1,18 @@
+servernet:
+  hosts:
+    server:
+      ansible_host: 10.200.245.224
+
+workersnet:
+  hosts:
+    worker1:
+      ansible_host: 10.200.245.225
+    worker2:
+      ansible_host: 10.200.245.226
+    worker3:
+      ansible_host: 10.200.245.227
+
+vagrantlabpublic:
+  children:
+    servernet:
+    workersnet:  
