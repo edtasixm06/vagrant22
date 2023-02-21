@@ -11,10 +11,36 @@ i la de la interfície docker. Per accedir s'utilitzarà el propi usuari que té
 usuari/passwd. S'entén que el servei ssh està engegat.
 
 
-Verificació i components:
+Components:
 
- * localhost.ini inventori de hosts en format ini.
- * localhost.yaml inventory de hosts en format yaml.
+ * **localhost.ini** inventori de hosts en format ini.
+ * **localhost.yaml** inventory de hosts en format yaml.
 
- 
+
+#### Verificació de l'inventory
+
+  Exemple de verificació del format de l'inventory
+
+  ```
+  ansible all --list-hosts -i localhost.yaml 
+
+  ansible all --list-hosts -i localhost.ini
+  ```
+
+  Exemple de verificació de la configuració de l'inventory
+
+  ```
+  ansible-inventory -i localhost.yaml --list 
+
+  ansible-inventory -i localhost.ini --list
+  ```
+
+#### Verificació d'ansible amb el mòdul ping
+
+  Aplicació del mòdul *ping*  als hosts de l'inventory identificant-se amb el propi usuari
+  i acceditn amb el password.
+
+  ```
+  ansible servernet -k -i inventory_lab_public.yaml -m ping
+  ```
 
