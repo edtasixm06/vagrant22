@@ -51,7 +51,7 @@ sudo per permetre a l'usuari ansible esdevenir un usuari privilegiat sense neces
    ping per verificar el funcionament d'ansible i la connectivitat amb els hosts de l'inventory.
    S'accedeix als hosts amb l'usuari *ansible* amb la seva clau privada *ansible_key*.
 
- * **ansible_hostsaula_f2g** Exemple que desplega un lab a l'aula amb un server i tres worker
+ * **ansible_example_hostsaula_f2g** Exemple que desplega un lab a l'aula amb un server i tres worker
    usant quatre hosts de l'aula. S'utilitza el propi usuari de l'alume accedint via usuari i passwd.
    Utilitza l'inventory *inventory_aula.yaml* que defineix tres xarxes. Aquest exemple aplica ansible
    amb el mòdul ping per verificar el funcionament d'ansible i la connectivitat amb els hosts
