@@ -32,6 +32,11 @@ sudo per permetre a l'usuari ansible esdevenir un usuari privilegiat sense neces
 
 #### Exemples
 
+ * **ansible_example_00_localhost_lab** Exemple per verificar que ansible està correctament instal·lat
+   usant tres interfícies del propi hosts, verificar la creació del inventari i comprovar-ne l'accés
+   usant el mòdul *ping*.
+
+
  * **ansible_example_01_vagrant_public_lab** Exemple que desplega un lab amb un server i tres workers
    usant vagrant. Els quatre hosts estan en mode bridge i obtenen adreces IP de la xarxa externa. 
    S'utilitza l'usuari ansible i la seva clau SSH per accedir a les màquines. Utilitza l'inventory 
