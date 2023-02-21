@@ -32,23 +32,22 @@ sudo per permetre a l'usuari ansible esdevenir un usuari privilegiat sense neces
 
 #### Exemple
 
-
- * **ansible_example_01_vagrant_public_lab** Exemple que desplega un lab amb un server i tres workers
-   usant vagrant. Els quatre hosts estan en mode bridge i obtenen adreces IP de la xarxa externa. 
-   S'utilitza l'usuari ansible i la seva clau SSH per accedir a les màquines. Utilitza l'inventory 
-   *inventory_lab_public.yaml* que defineix tres xarxes. Aquest exemple aplica ansible amb el mòdul
+ * **ansible_example_02_vagrant_private_lab** Exemple que desplega un lab amb un server i tres workers
+   usant vagrant. Els quatre hosts estan en una xarxa privada.
+   S'utilitza l'usuari ansible i la seva clau SSH per accedir a les màquines. Utilitza l'inventory
+   *inventory_lab_private.yaml* que defineix tres xarxes. Aquest exemple aplica ansible amb el mòdul
    ping per verificar el funcionament d'ansible i la connectivitat amb els hosts de l'inventory.
 
    S'accedeix als hosts amb l'usuari *ansible* amb la seva clau privada *ansible_key*. L'ordre següent
    mostra la verificació:
 
    ```
-   ansible all  -u ansible --private-key ./ansible_key -i inventory_lab_public.yaml -m ping
+   ansible all  -u ansible --private-key ./ansible_key -i inventory_lab_private.yaml -m ping
    ```
 
    S'utilitza un *playbook* que executa el mòdul *ping* i també genera un missatge per pantalla.
 
    ```
-   ansible-playbook -u ansible --private-key ./ansible_key -i inventory_lab_public.yaml playbook_exemple_01_ping.yaml
+   ansible-playbook -u ansible --private-key ./ansible_key -i inventory_lab_private.yaml playbook_exemple_02_ping.yaml
    ```
 
