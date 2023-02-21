@@ -59,5 +59,4 @@ sudo per permetre a l'usuari ansible esdevenir un usuari privilegiat sense neces
 
 
 
-#### Laboratoris
 
