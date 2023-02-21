@@ -31,4 +31,5 @@ sudo useradd -m -s /bin/bash ansible
 sudo mkdir /home/ansible/.ssh
 sudo cp /vagrant/ansible_key.pub /home/ansible/.ssh/authorized_keys
 sudo chown -R ansible.ansible /home/ansible/.ssh/
+sudo bash  -c 'echo "ansible ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ansible'
 SCRIPT
