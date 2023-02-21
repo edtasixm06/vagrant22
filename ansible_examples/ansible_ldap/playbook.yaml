@@ -1,6 +1,7 @@
 ---
 - name: Install LDAP server with edt.org database
   hosts: servernet
+  become: true  
   tasks:
     - name: Print message
       ansible.builtin.debug:
