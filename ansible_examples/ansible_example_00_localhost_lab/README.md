@@ -41,6 +41,8 @@ Components:
   i acceditn amb el password.
 
   ```
-  ansible servernet -k -i inventory_lab_public.yaml -m ping
+  ansible servernet -k -i localhost.yaml -m ping
+
+  ansible servernet -k -i localhost.ini -m ping
   ```
 
