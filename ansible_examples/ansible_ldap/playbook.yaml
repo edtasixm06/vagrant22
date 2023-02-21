@@ -1,0 +1,23 @@
+---
+- name: Install LDAP server with edt.org database
+  hosts: servernet
+  tasks:
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Installing LDAP
+    - name: Install LDAP client package
+      ansible.builtin.apt:
+        name: ldap-utils
+        state: present
+        update_cache: yes
+    - name: Install LDAP server package
+      ansible.builtin.apt:
+        name: slapd
+        state: present  
+    - name: Install package utilities
+      ansible.builtin.apt:
+        pkg:
+        - tree
+        - nmap
+        - vim
+          
