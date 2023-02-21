@@ -1,6 +1,5 @@
 # Vagrant / Ansible
-## ASIX M14-Projectes 
-## @edt Curs 2022-2023
+## ASIX M14-Projectes  @edt Curs 2022-2023
 
 #### Continguts
 
