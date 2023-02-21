@@ -2,7 +2,7 @@
 ## ASIX M14-Projectes @edt Curs 2022-2023
 
 
-### Configuració del Lab
+#### Configuració del Lab
 
 Aquests exemples utilitzen un lab desplegant amb vagrant amb un server i tres workers.  Els hosts es 
 creen amb un usuari *ansible*, s'han creat les claus SSH per aquest usuari i s'ha copiat la clau 
@@ -49,7 +49,6 @@ sudo per permetre a l'usuari ansible esdevenir un usuari privilegiat sense neces
    S'utilitza un *playbook* que executa el mòdul *ping* i també genera un missatge per pantalla.
 
    ```
-   ansible-playbook -u ansible --private-key ./ansible_key \
-                   -i inventory_lab_private.yaml playbook_exemple_01_ping.yaml
+   ansible-playbook -u ansible --private-key ./ansible_key -i inventory_lab_private.yaml playbook_exemple_01_ping.yaml
    ```
 
