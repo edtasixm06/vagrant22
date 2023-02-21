@@ -44,7 +44,20 @@ sudo per permetre a l'usuari ansible esdevenir un usuari privilegiat sense neces
    ping per verificar el funcionament d'ansible i la connectivitat amb els hosts de l'inventory.
 
 
- * **ansible_example_02_vagrant_private_lab** desplegament d'una VM amb debian.
+ * **ansible_example_02_vagrant_private_lab** Exemple que desplega un lab amb un server i tres workers
+   usant vagrant. Els quatre hosts estan en una xarxa privada.
+   S'utilitza l'usuari ansible i la seva clau SSH per accedir a les màquines. Utilitza l'inventory
+   *inventory_lab_private.yaml* que defineix tres xarxes. Aquest exemple aplica ansible amb el mòdul
+   ping per verificar el funcionament d'ansible i la connectivitat amb els hosts de l'inventory.
+   S'accedeix als hosts amb l'usuari *ansible* amb la seva clau privada *ansible_key*.
+
+ * **ansible_hostsaula_f2g** Exemple que desplega un lab a l'aula amb un server i tres worker
+   usant quatre hosts de l'aula. S'utilitza el propi usuari de l'alume accedint via usuari i passwd.
+   Utilitza l'inventory *inventory_aula.yaml* que defineix tres xarxes. Aquest exemple aplica ansible
+   amb el mòdul ping per verificar el funcionament d'ansible i la connectivitat amb els hosts
+   de l'inventory. S'accedeix als hosts amb l'usuari de l'alumne i el seu password.
+
+
 
 #### Laboratoris
 
