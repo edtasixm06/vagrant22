@@ -1,0 +1,65 @@
+---
+- name: Post Install Aula (F2G)
+  hosts: servernet
+  become: true  
+  tasks:
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Installing ...
+          
+    - name: Install LDAP client package
+      ansible.builtin.apt:
+        name: ldap-utils
+        state: present
+        update_cache: yes
+    - name: Install LDAP server package
+      ansible.builtin.apt:
+        name: slapd
+        state: present  
+    - name: Install package utilities
+      ansible.builtin.apt:
+        pkg:
+        - tree
+        - nmap
+        - vim
+
+#$install_aula_script_debian = <<SCRIPT
+#sudo apt-get update
+#sudo apt-get -y install vim vim-gtk3 mc geany aptitude tree git openssh-server
+#sudo apt-get -y purge gnome-games
+#sudo apt-get -y autoremove
+## pendent: eliminar pregunta interactiva
+#sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -y install krb5-user"
+#sudo apt-get -y install krb5-multidev libpam-mount sssd nfs-common autofs ufw curl
+#git clone https://gitlab.com/manelmellado/ubnt-at-inf.git
+##cd ubnt-at-inf/Debian\ 11/arxius/etc/
+#sudo cp "ubnt-at-inf/Debian 11/arxius/etc/sssd/sssd.conf" /etc/sssd/
+#sudo cp "ubnt-at-inf/Debian 11/arxius/etc/sudoers.d/inf" /etc/sudoers.d/
+#sudo chmod 600 /etc/sssd/sssd.conf
+#sudo ls -l /etc/sssd
+#sudo ls -l /etc/sudoers.d
+#sudo rm -rf ubnt-at-inf
+## pendent: eliminar pregunta interactiva
+#sudo pam-auth-update --enable mkhomedir sss systemd pwquality unix libpam-mount
+#sudo systemctl disable sssd-nss.socket
+#sudo systemctl disable sssd-autofs.socket
+#sudo systemctl restart sssd
+#sudo systemctl restart rpc-gssd
+## Editar fstab
+#sudo apt-get -y install gpm pwgen
+#sudo sed -i '/^[^#]/  s/main$/main contrib non-free/' /etc/apt/sources.list
+#sudo apt-get update
+#sudo apt-get -y install chromium vlc gimp git tig meld linux-headers-`uname -r` gnome-shell-extension-desktop-icons terminator firmware-realtek firmware-misc-nonfree hunspell-ca hunspell-es
+#AULA=profeF2G
+#SERVER=10.200.247.246
+#line="$SERVER $AULA.informatica.escoladeltreball.org server"
+#sudo bash -c "echo $line >> /etc/hosts"
+#sudo apt-get -y install --install-recommends epoptes-client -y
+#sudo epoptes-client -c  $AULA.informatica.escoladeltreball.org
+#sudo apt-mark hold linux-image-$(uname -r) # per apt-get
+#sudo aptitude hold linux-image-$(uname -r) # per aptitude
+#sudo apt-mark hold linux-headers-$(uname -r) # per apt-get
+#sudo aptitude hold linux-headers-$(uname -r) # per aptitude
+#sed -i 's/\#WaylandEnable=false/WaylandEnable=false/' /etc/gdm3/daemon.conf
+#SCRIPT
+#
