@@ -6,23 +6,31 @@
     - name: Print message
       ansible.builtin.debug:
         msg: Installing ...
-          
-    - name: Install LDAP client package
-      ansible.builtin.apt:
-        name: ldap-utils
-        state: present
-        update_cache: yes
-    - name: Install LDAP server package
-      ansible.builtin.apt:
-        name: slapd
-        state: present  
-    - name: Install package utilities
+- name: Update all packages to their latest version
+  ansible.builtin.apt:
+    name: "*"
+    state: latest         
+
+    - name: Install packages
       ansible.builtin.apt:
         pkg:
         - tree
         - nmap
         - vim
+        - vim-gtk3
+        - mc
+        - geany
+        - aptitude
+        - git
+        - openssl-server  
+      update_cache: yes
 
+    - name: Remove packages
+      ansible.builtin.apt:
+        name: gnome-games
+        state: absent
+
+          
 #$install_aula_script_debian = <<SCRIPT
 #sudo apt-get update
 #sudo apt-get -y install vim vim-gtk3 mc geany aptitude tree git openssh-server
