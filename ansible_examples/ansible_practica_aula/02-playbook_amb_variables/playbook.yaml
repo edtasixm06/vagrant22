@@ -78,13 +78,13 @@
         enabled: no
       loop: [ sssd-autofs.socket, sssd-nss.socket ]
 
-    - name: Disable services
+    - name: Enable services
       ansible.builtin.service:
         name: "{{ item }}"
         enabled: yes
       loop: [ sssd, rpc-gssd ]
       
-    - name: Add contrib and nonfree to all repos (sed -i '/^[^#]/  s/main$/main contrib non-free/' /etc/apt/sources.list)
+    - name: Add contrib and nonfree to all repos
       ansible.builtin.apt_repository:
         filename: inf
         repo: "{{ item }}"
@@ -106,7 +106,7 @@
         name: linux-headers-{{ ansible_kernel }}
         state: latest
 
-    - name: Hold apt-get and aptitude authomatic updates linux-headers and linux-images          
+    - name: Hold apt-get and aptitude automatic updates linux-headers and linux-images          
       ansible.builtin.shell: "{{ item }}"
       loop:
       - apt-mark hold linux-image-$(uname -r)
@@ -134,15 +134,22 @@
     #  ansible.builtin.shell: echo "10.200.247.246 profeF2G.informatica.escoladeltreball.org server" >> /etc/hosts
     # -------------------------------------------------------------------------
     # Mètode (1)
+
     - name: Test if exists epoptes profe line in /etc/hosts
       ansible.builtin.shell: grep -c "10.200.247.246 profeF2G.informatica.escoladeltreball.org server" /etc/hosts || true
       register: test_grep
+      tags:
+        - epoptes
+        - metode1
 
     - name: add epoptes profe host server to /etc/hosts
       ansible.builtin.lineinfile:
         dest: /etc/hosts
         line: 10.200.247.246 profeF2G.informatica.escoladeltreball.org server
       when: test_grep.stdout == "0"
+      tags:
+        - epoptes
+        - metode1
 
     # -------------------------------------------------------------------------
     # Mètode (2)
