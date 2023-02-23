@@ -1,0 +1,215 @@
+---
+- name: Post Install Aula (F2G)
+  hosts: servernet
+  become: true  
+  tasks:
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Installing  
+
+    - name: Install packages
+      ansible.builtin.apt:
+        state: latest
+        pkg:
+        - tree
+        - nmap
+        - vim
+        - vim-gtk3
+        - mc
+        - geany
+        - aptitude
+        - git
+        - openssh-server
+        - krb5-user
+        - krb5-multidev 
+        - libpam-mount 
+        - sssd 
+        - nfs-common 
+        - autofs 
+        - ufw 
+        - curl
+        - gpm
+        - pwgen 
+        update_cache: yes
+
+    - name: Remove packages
+      ansible.builtin.apt:
+        name: gnome-games
+        state: absent
+
+    - name: Remove dependencies that are no longer required
+      ansible.builtin.apt:
+        autoremove: yes
+
+    - name: Copy file sssd.conf
+      ansible.builtin.copy:
+        src: ./sssd.conf
+        dest: /etc/sssd
+        owner: root
+        group: root
+        mode: '0600'
+      ignore_errors: true
+
+    - name: Copy file sudoers.d inf
+      ansible.builtin.copy:
+        src: ./inf
+        dest: /etc/sudoers.d
+        owner: root
+        group: root
+      ignore_errors: true   
+
+        #- name: Download sssd.conf
+        #ansible.builtin.get_url:
+        #url: https://gitlab.com/manelmellado/ubnt-at-inf/-/blob/main/Debian%2011/arxius/etc/sssd/sssd.conf
+        #dest: /etc/sssd
+        #mode: '0600'
+
+        #- name: Download sssd.conf
+        #ansible.builtin.get_url:
+        #url: https://gitlab.com/manelmellado/ubnt-at-inf/-/blob/main/Debian%2011/arxius/etc/sudoers.d/inf
+        #dest: /etc/sudoers.d
+
+    - name: Pam Auth Update
+      ansible.builtin.command: pam-auth-update --enable mkhomedir sss systemd pwquality unix libpam-mount
+
+    - name: Disable services 
+      ansible.builtin.service:
+        name: "{{ item }}"
+        enabled: no
+      loop: [ sssd-autofs.socket, sssd-nss.socket ]
+
+    - name: Disable services
+      ansible.builtin.service:
+        name: "{{ item }}"
+        enabled: yes
+      loop: [ sssd, rpc-gssd ]
+      
+    - name: Add contrib and nonfree to all repos (sed -i '/^[^#]/  s/main$/main contrib non-free/' /etc/apt/sources.list)
+      ansible.builtin.apt_repository:
+        filename: inf
+        repo: "{{ item }}"
+        state: present
+      loop:     
+        - deb https://deb.debian.org/debian bullseye contrib non-free
+        - deb https://security.debian.org/debian-security bullseye-security contrib non-free
+        - deb https://deb.debian.org/debian bullseye-updates contrib non-free
+        - deb https://deb.debian.org/debian bullseye-backports contrib non-free
+
+    - name: Install packages (contrib non-free)
+      ansible.builtin.apt:
+        pkg: [ chromium, vlc, gimp, tig, meld, gnome-shell-extension-desktop-icons, terminator, 
+               firmware-realtek, firmware-misc-nonfree, hunspell-ca, hunspell-es ]
+        update_cache: true
+
+    - name: Install kernel headers 
+      ansible.builtin.apt:
+        name: linux-headers-{{ ansible_kernel }}
+        state: latest
+
+    - name: Hold apt-get and aptitude authomatic updates linux-headers and linux-images          
+      ansible.builtin.shell: "{{ item }}"
+      loop:
+      - apt-mark hold linux-image-$(uname -r)
+      - apt-mark hold linux-headers-$(uname -r)
+      - aptitude hold linux-image-$(uname -r)
+      - aptitude hold linux-headers-$(uname -r)
+      #- sed -i 's/\#WaylandEnable=false/WaylandEnable=false/' /etc/gdm3/daemon.conf
+
+    - name: Replace  WaylandEnable  
+      ansible.builtin.replace:
+        path: /etc/hosts
+        regexp: '#WaylandEnable=false'
+        replace: 'WaylandEnable=false'
+
+    # -------------------------------------------------------------------------
+    #AULA=profeF2G
+    #SERVER=10.200.247.246
+    #line="$SERVER $AULA.informatica.escoladeltreball.org server"
+    #sudo bash -c "echo $line >> /etc/hosts"
+    #sudo apt-get -y install --install-recommends epoptes-client -y
+    #sudo epoptes-client -c  $AULA.informatica.escoladeltreball.org
+   
+    # Atenció, aquesta tasca NO és idempotent! 
+    #- name: Add Profe host to the /etc/hosts
+    #  ansible.builtin.shell: echo "10.200.247.246 profeF2G.informatica.escoladeltreball.org server" >> /etc/hosts
+    # -------------------------------------------------------------------------
+    # Mètode (1)
+    - name: Test if exists epoptes profe line in /etc/hosts
+      ansible.builtin.shell: grep -c "10.200.247.246 profeF2G.informatica.escoladeltreball.org server" /etc/hosts || true
+      register: test_grep
+
+    - name: add epoptes profe host server to /etc/hosts
+      ansible.builtin.lineinfile:
+        dest: /etc/hosts
+        line: 10.200.247.246 profeF2G.informatica.escoladeltreball.org server
+      when: test_grep.stdout == "0"
+
+    # -------------------------------------------------------------------------
+    # Mètode (2)
+    - name: Check if epoptes profe host exits in /etc/hosts
+      lineinfile:
+        state: absent
+        path: /etc/hosts
+        regexp: '10.200.247.246 profeF2G.informatica.escoladeltreball.org server'
+      check_mode: true
+      changed_when: false 
+      register: check
+
+    - name: if line not exits add it to /etc/hosts
+      lineinfile:
+        state: present
+        path: /etc/hosts
+        line: 10.200.247.246 profeF2G.informatica.escoladeltreball.org server
+      when: check.found == 0        
+    # -------------------------------------------------------------------------
+
+    - name: Install epoptes client
+      ansible.builtin.apt:
+        name: epoptes-client
+        install_recommends: yes
+
+    - name: Start epoptes and get server key
+      ansible.builtin.shell:  epoptes-client -c  profeF2G.informatica.escoladeltreball.org
+      ignore_errors: true
+
+# -------------------------------------------------------------------
+#$install_aula_script_debian = <<SCRIPT
+#sudo apt-get update
+#sudo apt-get -y install vim vim-gtk3 mc geany aptitude tree git openssh-server
+#sudo apt-get -y purge gnome-games
+#sudo apt-get -y autoremove
+## pendent: eliminar pregunta interactiva
+#sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get -y install krb5-user"
+#sudo apt-get -y install krb5-multidev libpam-mount sssd nfs-common autofs ufw curl
+#git clone https://gitlab.com/manelmellado/ubnt-at-inf.git
+##cd ubnt-at-inf/Debian\ 11/arxius/etc/
+#sudo cp "ubnt-at-inf/Debian 11/arxius/etc/sssd/sssd.conf" /etc/sssd/
+#sudo cp "ubnt-at-inf/Debian 11/arxius/etc/sudoers.d/inf" /etc/sudoers.d/
+#sudo chmod 600 /etc/sssd/sssd.conf
+#sudo ls -l /etc/sssd
+#sudo ls -l /etc/sudoers.d
+#sudo rm -rf ubnt-at-inf
+## pendent: eliminar pregunta interactiva
+#sudo pam-auth-update --enable mkhomedir sss systemd pwquality unix libpam-mount
+#sudo systemctl disable sssd-nss.socket
+#sudo systemctl disable sssd-autofs.socket
+#sudo systemctl restart sssd
+#sudo systemctl restart rpc-gssd
+## Editar fstab
+#sudo apt-get -y install gpm pwgen
+#sudo sed -i '/^[^#]/  s/main$/main contrib non-free/' /etc/apt/sources.list
+#sudo apt-get update
+#sudo apt-get -y install chromium vlc gimp git tig meld linux-headers-`uname -r` gnome-shell-extension-desktop-icons terminator firmware-realtek firmware-misc-nonfree hunspell-ca hunspell-es
+#AULA=profeF2G
+#SERVER=10.200.247.246
+#line="$SERVER $AULA.informatica.escoladeltreball.org server"
+#sudo bash -c "echo $line >> /etc/hosts"
+#sudo apt-get -y install --install-recommends epoptes-client -y
+#sudo epoptes-client -c  $AULA.informatica.escoladeltreball.org
+#sudo apt-mark hold linux-image-$(uname -r) # per apt-get
+#sudo aptitude hold linux-image-$(uname -r) # per aptitude
+#sudo apt-mark hold linux-headers-$(uname -r) # per apt-get
+#sudo aptitude hold linux-headers-$(uname -r) # per aptitude
+#sed -i 's/\#WaylandEnable=false/WaylandEnable=false/' /etc/gdm3/daemon.conf
+#SCRIPT
+#
