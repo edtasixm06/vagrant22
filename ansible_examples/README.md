@@ -74,6 +74,12 @@ sudo per permetre a l'usuari ansible esdevenir un usuari privilegiat sense neces
    servei phpLdapAdmin. Hi ha múltiples versions de playbooks, per separat i conjuntament.
  
  
+---
+ 
+ #### Ansible up & running
+ 
+  * **Ansible up & running** Exemples organitzats per capótols del llibre que porta aquest mateix
+    nom "*Ansible up & running, 2nd edition, Lorin Hochstein & René Moser, O'Reilly*".
  
  
  
