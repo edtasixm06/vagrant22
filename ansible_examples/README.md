@@ -58,5 +58,25 @@ sudo per permetre a l'usuari ansible esdevenir un usuari privilegiat sense neces
    de l'inventory. S'accedeix als hosts amb l'usuari de l'alumne i el seu password.
 
 
+---
 
+#### Pràctiques
+
+ * **Pràctica aula** Playbook d'ansible per implementar la post instal3lació d'un host de l'aula com
+   els hosts dels alumes. S'aplica a una màquina virtual vagrant desplegada en mode bridge que és
+   un host més de l'aula.
+   
+ * **Pràctica Docker** Playbook per aplicar docker a un vonjunt de hosts desplegats amb vagrant (un
+   servidor i tres workers). Permet treballar la creació de repositoris apt, l'obtenció de les seves
+   claus gpg i l'actualització.
+   
+ * **Pràctica LDAP amb phpLdapAdmin** Implementa en un servidor desplegat en vagrant el servei LDAP i el
+   servei phpLdapAdmin. Hi ha múltiples versions de playbooks, per separat i conjuntament.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 
