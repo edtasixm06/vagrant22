@@ -1,26 +1,21 @@
     - name: Install packages and dependencies
       ansible.builtin.apt:
-        pkg:
-        - php-xml 
-        - apache2 
-        - tree
-        - nmap
-        - vim   
+        name: "{{ debian.phpldapadmin.packages }}"
         update_cache: yes
 
     - name: Install a .deb package from the internet
       ansible.builtin.apt:
-        deb: http://ftp.de.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.2_all.deb
+        deb: "{{ debian.phpldapadmin.debpkg }}"
 
     - name: Copy the config.php file
       ansible.builtin.copy:
-        src: ./config.php
-        dest: /etc/phpldapadmin/config.php
+        src: "{{ debian.phpldapadmin.config.source }}"
+        dest: "{{ debian.phpldapadmin.config.destination }}"
 
     - name: Copy the phpldapadmin.conf file
       ansible.builtin.copy:
-        src: ./phpldapadmin.conf
-        dest: /etc/apache2/conf-enabled/phpldapadmin.conf
+        src: "{{ debian.phpldapadmin.phpldapadmin_conf.source }}"
+        dest: "{{ debian.phpldapadmin.phpldapadmin_conf.destination }}"
           
     - name: Start service apache2, if not started
       ansible.builtin.service:

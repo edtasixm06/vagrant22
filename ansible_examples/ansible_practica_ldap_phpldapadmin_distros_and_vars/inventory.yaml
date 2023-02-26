@@ -1,8 +1,12 @@
 servernet:
   hosts:
-    server:
-      ansible_host: 192.168.1.33
+    alpine:
+      ansible_host: 192.168.1.42
       ansible_user: vagrant
+    debian:
+      ansible_host: 192.168.1.44
+      ansible_user: ansible
+      ansible_ssh_private_key_file: ./ansible_key
 
 workersnet:
   hosts:
