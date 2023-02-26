@@ -1,0 +1,30 @@
+    - name: Install packages and dependencies
+      ansible.builtin.apt:
+        pkg:
+        - php-xml 
+        - apache2 
+        - tree
+        - nmap
+        - vim   
+        update_cache: yes
+
+    - name: Install a .deb package from the internet
+      ansible.builtin.apt:
+        deb: http://ftp.de.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.2_all.deb
+
+    - name: Copy the config.php file
+      ansible.builtin.copy:
+        src: ./config.php
+        dest: /etc/phpldapadmin/config.php
+
+    - name: Copy the phpldapadmin.conf file
+      ansible.builtin.copy:
+        src: ./phpldapadmin.conf
+        dest: /etc/apache2/conf-enabled/phpldapadmin.conf
+          
+    - name: Start service apache2, if not started
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
+
+
