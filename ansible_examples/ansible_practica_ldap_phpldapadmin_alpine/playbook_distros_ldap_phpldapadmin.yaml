@@ -16,6 +16,9 @@
     - include_tasks: ./part_playbook_ldap_alpine.yaml
       when: ansible_os_family == 'Alpine'
 
+    - include_tasks: ./part_playbook_ldap_debian.yaml
+      when: ansible_os_family == 'Debian'
+
 
 - name: Install phpldapadmin
   hosts: servernet
@@ -29,3 +32,6 @@
 
     - import_tasks: ./part_playbook_phpldapadmin_alpine.yaml
       when: ansible_os_family == "Alpine"
+
+    - import_tasks: ./part_playbook_phpldapadmin_debian.yaml
+      when: ansible_os_family == "Debian"
