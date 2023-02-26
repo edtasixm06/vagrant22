@@ -52,4 +52,10 @@ Configuració phpLdapAdmin:
  * **playbook_distros_ldap_phpldapadmin.yaml** Playbook que aplica la instal3lació de LDAP
    i phpldapadmin al server segons el tipus de sistema GNU/Linux que sigui.
 
+   * **part_playbook_ldap_alpine.yaml** Fitxer amb les tasques d'instal·lar LDAP a alpine,
+     no és un playbook, és la part de tasques a fer include.
+
+   * **part_playbook_phpldapadmin_alpine.yaml** Fitxer amb les tasques (no playbook) a relitzar
+     per instal·lar phpldapadmin a alpine.
+
 
