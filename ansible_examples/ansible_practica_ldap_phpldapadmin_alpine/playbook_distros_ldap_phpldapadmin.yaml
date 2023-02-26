@@ -30,6 +30,10 @@
       ansible.builtin.debug:
         msg: Installing phpLdapAdmin
 
+    - name: Print os information
+      ansible.builtin.debug:
+        msg: "{{ ansible_os_family }}"
+
     - import_tasks: ./part_playbook_phpldapadmin_alpine.yaml
       when: ansible_os_family == "Alpine"
 
