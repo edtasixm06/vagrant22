@@ -26,7 +26,7 @@ sudo per permetre a l'usuari ansible esdevenir un usuari privilegiat sense neces
    sudo mkdir /home/ansible/.ssh
    sudo cp /vagrant/ansible_key.pub /home/ansible/.ssh/authorized_keys
    sudo chown -R ansible.ansible /home/ansible/.ssh/
-   sudo bash  -c 'echo "ansible ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ansible'
+   sudo bash  -c 'echo "ansible ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ansible' 
    SCRIPT
    ```
 
@@ -70,9 +70,11 @@ sudo per permetre a l'usuari ansible esdevenir un usuari privilegiat sense neces
    servidor i tres workers). Permet treballar la creació de repositoris apt, l'obtenció de les seves
    claus gpg i l'actualització.
    
- * **Pràctica LDAP amb phpLdapAdmin** Implementa en un servidor desplegat en vagrant el servei LDAP i el
-   servei phpLdapAdmin. Hi ha múltiples versions de playbooks, per separat i conjuntament.
- 
+ * **Pràctica LDAP amb phpLdapAdmin (Debian)** Implementa en un servidor Debian desplegat en vagrant 
+   el servei LDAP i el servei phpLdapAdmin. Hi ha múltiples versions de playbooks, per separat i conjuntament.
+   
+ * **Pràctica LDAP amb phpLdapAdmin (Alpine)** Implementa en un servidor Alpine desplegat en vagrant 
+   el servei LDAP i el servei phpLdapAdmin. Hi ha múltiples versions de playbooks, per separat i conjuntament.
  
 ---
  
