@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
     #srv.vm.box = "debian/bullseye64"
     #srv.vm.network "private_network", ip: "172.30.30.10"
     srv.vm.network "public_network", bridge: "enp1s0"
-    srv.vm.provision "shell", inline: $install_ssh_pubkey_script_debian
+    srv.vm.provision "shell", inline: $install_ssh_pubkey_script_alpine
 
   end
 
@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
 #  end 
 end
 
-$install_ssh_pubkey_script_debian = <<SCRIPT
+$install_ssh_pubkey_script_alpine = <<SCRIPT
 sudo adduser -D  ansible
 sudo mkdir /home/ansible/.ssh
 sudo cp /vagrant/ansible_key.pub /home/ansible/.ssh/authorized_keys
