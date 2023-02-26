@@ -75,7 +75,9 @@ sudo per permetre a l'usuari ansible esdevenir un usuari privilegiat sense neces
    
  * **Pràctica LDAP amb phpLdapAdmin (Alpine)** Implementa en un servidor Alpine desplegat en vagrant 
    el servei LDAP i el servei phpLdapAdmin. Hi ha múltiples versions de playbooks, per separat i conjuntament.
- 
+
+ * **Pràctica LDAP amb phpldapadmin distros (alpine + debian) amb vars** Implementa un playbook amb un play 
+   usant vars i fitxers de include que insttal·len tant a Alpine com a debian.
 ---
  
  #### Ansible up & running
