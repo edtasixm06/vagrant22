@@ -1,7 +1,9 @@
 ---
 - name: Install LDAP server with edt.org database
   hosts: servernet
-  become: true  
+  become: true 
+  vars_files:
+    - vars_alpine.yaml
   tasks:
     - name: Print message
       ansible.builtin.debug:
@@ -11,16 +13,19 @@
       ansible.builtin.debug:
         msg: "{{ ansible_os_family }}" 
     
-    - include_tasks: ./part_playbook_ldap_debian.yaml
-      when: ansible_os_family == 'Debian'
+    - include_tasks: ./part_playbook_ldap_alpine.yaml
+      when: ansible_os_family == 'Alpine'
+
 
 - name: Install phpldapadmin
   hosts: servernet
   become: true
+  vars_files:
+    - vars_alpine.yaml
   tasks:
     - name: Print message
       ansible.builtin.debug:
         msg: Installing phpLdapAdmin
 
-    - import_tasks: ./part_playbook_phpldapadmin_debian.yaml
-      when: ansible_os_family == "Debian"
+    - import_tasks: ./part_playbook_phpldapadmin_alpine.yaml
+      when: ansible_os_family == "Alpine"
