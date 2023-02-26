@@ -66,8 +66,3 @@ Configuració phpLdapAdmin:
  * **playbook_distros_ldap_phpldapadmin.yaml** Fitxer que instal3la els dos serveis usant includes
    per a cada servei i segons el tipus de distribució GNU/Linux del host remot.
 
-#### Alpine
-
- * **alpine** Directori amb els fitxers necessaris per instal3lar LDAP i phpldapadmin usant un playbook
-   d'ansible a un servidor Alpine. Implementa *vars* en un fitxer a part i hi ha diversos exemples
-   de playbooks.

@@ -2,7 +2,7 @@
 ## ASIX M14-Projectes @edt Curs 2022-2023
 
 
-### Pràctica LDAP amb phpLdapAdmin
+### Pràctica LDAP amb phpLdapAdmin amb alpine
 
 Aquests exemples utilitzen un lab desplegant amb vagrant amb un server debian al que se li
 instal·la LDAP amb la base de dades *edt.org* i l'eina d'administració gràfica phpLdapAdmin.
