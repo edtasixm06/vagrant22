@@ -71,10 +71,18 @@
       ansible.builtin.debug:
         msg: '{{ aules["profef2g"].fqdn }}'
 # ---------------------------------------------------------------
+    - name: Print vars info aules aules.default
+      ansible.builtin.debug:
+        msg: '{{ aules.default }} {{ aula_default }}'
 
+          
     - name: Print vars info aules aules[aules.default].entry
       ansible.builtin.debug:
         msg: '{{ aules[aules.default].entry }}'
+          
+    - name: Print vars info aules aules[aules.default].entry
+      ansible.builtin.debug:
+        msg: '{{ aules[aula_default].entry }}'
 
 # ---------------------------------------------------------------
           

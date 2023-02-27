@@ -1,0 +1,41 @@
+    # -------------------------------------------------------------------------
+    # Mètode (1)
+
+    - name: Test if exists epoptes profe line in /etc/hosts
+      ansible.builtin.shell: grep -c "{{ aules[aula_default].entry }}" /etc/hosts || true
+      register: test_grep
+
+    - name: add epoptes profe host server to /etc/hosts
+      ansible.builtin.lineinfile:
+        dest: /etc/hosts
+        line: "{{ aules[aula_default].entry }}"
+      when: test_grep.stdout == "0"
+
+    # -------------------------------------------------------------------------
+    # Mètode (2)
+    - name: Check if epoptes profe host exits in /etc/hosts
+      lineinfile:
+        state: absent
+        path: /etc/hosts
+        regexp: "{{ aules[aula_default].entry }}"
+      check_mode: true
+      changed_when: false 
+      register: check
+
+    - name: if line not exits add it to /etc/hosts
+      lineinfile:
+        state: present
+        path: /etc/hosts
+        line: "{{ aules[aula_default].entry }}"
+      when: check.found == 0        
+    # -------------------------------------------------------------------------
+
+    - name: Install epoptes client
+      ansible.builtin.apt:
+        name: epoptes-client
+        install_recommends: yes
+
+    - name: Start epoptes and get server key
+      ansible.builtin.shell:  epoptes-client -c  "{{ aules[aula_default].fqdn }}"
+      ignore_errors: true
+
