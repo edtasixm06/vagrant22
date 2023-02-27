@@ -29,3 +29,6 @@
    amb el mòdul ping per verificar el funcionament d'ansible i la connectivitat amb els hosts
    de l'inventory. S'accedeix als hosts amb l'usuari de l'alumne i el seu password.
 
+ * **ansible_example_04_variables** Exemple per practicar treballar amb variables de disccionar-hi, 
+   adreçar-se als seus elements, indexar i accedir segons el valor d'una altra variable. Trebala amb 
+   un diccionari de hosts per practicar la configuració de *epoptes*.
