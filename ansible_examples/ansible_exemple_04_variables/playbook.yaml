@@ -1,0 +1,81 @@
+---
+- name: test use of vars
+  hosts: servernet
+  become: true 
+  vars_files:
+    - vars.yaml
+  tasks:
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Test use of vars
+
+    - name: Print os information
+      ansible.builtin.debug:
+        msg: "{{ ansible_os_family }}" 
+
+    - name: Print hostvars
+      ansible.builtin.debug:
+        msg: "{{ hostvars }}"
+
+    - name: Print ansible information
+      ansible.builtin.debug:
+        msg: "{{ ansible_facts }}"
+
+    - name: Print vars info debian
+      ansible.builtin.debug:
+        msg: "{{ debian }}"
+
+    - name: Print vars info debian.ldap
+      ansible.builtin.debug:
+        msg: "{{ debian.ldap }}"
+
+    - name: Print vars info debian.ldap.slapd
+      ansible.builtin.debug:
+        msg: "{{ debian.ldap.slapd }}"
+          
+    - name: Print vars info debian.ldap.packages
+      ansible.builtin.debug:
+        msg: "{{ debian.ldap.packages }}"
+# -----------------------------------------------------
+
+    - name: Print vars info aules
+      ansible.builtin.debug:
+        msg: "{{ aules }}"
+
+    - name: Print vars info aules.profef2g
+      ansible.builtin.debug:
+        msg: "{{ aules.profef2g }}"
+
+    - name: Print vars info aules.profef2g.fqdn
+      ansible.builtin.debug:
+        msg: "{{ aules.profef2g.fqdn }}"
+
+    - name: Print vars info aules.profef2g.entry
+      ansible.builtin.debug:
+        msg: "{{ aules.profef2g.entry }}"
+# ------------------------------------------------------
+
+    - name: Print vars info aules varies vars
+      ansible.builtin.debug:
+        msg: 'Aula: {{ aules.profef2g.name }} ip: {{ aules.profef2g.ip}} fqdn: {{ aules.profef2g.fqdn}}'
+
+    - name: Print vars info aules linia /etc/hosts
+      ansible.builtin.debug:
+        msg: "{{ aules.profef2g.ip}} {{ aules.profef2g.fqdn }} server"
+
+    - name: Print vars info aules aules[profef2g]
+      ansible.builtin.debug:
+        msg: '{{ aules["profef2g"] }}'
+
+    - name: Print vars info aules aules[profef2g].fqdn
+      ansible.builtin.debug:
+        msg: '{{ aules["profef2g"].fqdn }}'
+# ---------------------------------------------------------------
+
+    - name: Print vars info aules aules[aules.default].entry
+      ansible.builtin.debug:
+        msg: '{{ aules[aules.default].entry }}'
+
+# ---------------------------------------------------------------
+          
+
