@@ -1,0 +1,4 @@
+==> Builds finished. The artifacts of successful builds are:
+--> amazon-ebs.firstrun: AMIs were created:
+us-east-1: ami-0efba660829d0cb2b
+

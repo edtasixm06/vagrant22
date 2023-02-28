@@ -1,0 +1,77 @@
+Amazon Linux 2 AMI (HVM) - Kernel 5.10, SSD Volume Type
+ami-0dfcb1ef8550277af (64-bit (x86)) / ami-0cd7323ab3e63805f (64-bit (Arm))
+Amazon Linux 2 comes with five years support. It provides Linux kernel 5.10 tuned for optimal performance on Amazon EC2, systemd 219, GCC 7.3, Glibc 2.26, Binutils 2.29.1, and the latest software packages through extras. This AMI is the successor of the Amazon Linux AMI that is now under maintenance only mode and has been removed from this wizard.
+
+Red Hat Enterprise Linux 9 (HVM), SSD Volume Type
+ami-0c9978668f8d55984 (64-bit (x86)) / ami-0373218dcae329f21 (64-bit (Arm))
+Red Hat Enterprise Linux version 9 (HVM), EBS General Purpose (SSD) Volume Type
+
+Ubuntu Server 22.04 LTS (HVM), SSD Volume Type
+ami-0557a15b87f6559cf (64-bit (x86)) / ami-0f9bd9098aca2d42b (64-bit (Arm))
+Ubuntu Server 22.04 LTS (HVM),EBS General Purpose (SSD) Volume Type. Support available from Canonical (http://www.ubuntu.com/cloud/services).
+
+
+Debian 11 (HVM), SSD Volume Type
+ami-0fec2c2e2017f4e7b (64-bit (x86)) / ami-0e6694e5116a0086f (64-bit (Arm))
+Debian 11 (HVM), EBS General Purpose (SSD) Volume Type. Community developed free GNU/Linux distribution. https://www.debian.org/
+
+
+Microsoft Windows Server 2022 Base
+ami-0c2b0d3fb02824d92 (64-bit (x86))
+Microsoft Windows 2022 Datacenter edition. [English]
+
+# ---------------------------------------------------------------------------------------------------------
+
+packer example 20230228193252
+ami-0576d3639c07e8f64
+Platform: Other Linux
+Architecture: x86_64
+Owner: 332104634129
+Publish date: 2023-02-28
+Root device type: ebs
+Virtualization: hvm
+ENA enabled: Yes
+ 
+# ------------------------------------------------------------------------------------------------------------
+
+
+alpine-3.16.4-x86_64-uefi-cloudinit-r0
+ami-0fefc15a3dd9dda05
+Alpine Linux 3.16.4 - https://alpinelinux.org/cloud
+Platform: Other Linux
+Architecture: x86_64
+Owner: 538276064493
+Publish date: 2023-02-11
+Root device type: ebs
+Virtualization: hvm
+ENA enabled: Yes
+
+alpine-3.16.4-x86_64-bios-tiny-r0
+ami-095e336546bd15cea
+Alpine Linux 3.16.4 - https://alpinelinux.org/cloud
+Platform: Other Linux
+Architecture: x86_64
+Owner: 538276064493
+Publish date: 2023-02-11
+Root device type: ebs
+Virtualization: hvm
+ENA enabled: Yes
+
+
+Fedora-Cloud-Base-38-20230225.n.0.x86_64-hvm-us-east-1-gp2-0
+ami-0dcd13c46a71cd2ea
+Fedora AMI Description
+Platform: Fedora
+Architecture: x86_64
+Owner: 125523088429
+Publish date: 2023-02-25
+Root device type: ebs
+Virtualization: hvm
+ENA enabled: Yes
+
+NO FREE TIER:
+Fedora 32 Cloud Base Images (x86_64) HVM
+ByAmazon Web Services  | Ver 32-1.6
+Fedora creates an innovative, free, and open source platform for hardware, clouds, and containers that enables software developers and community members to build tailored solutions for their users.
+
+

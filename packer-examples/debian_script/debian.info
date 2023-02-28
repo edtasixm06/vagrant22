@@ -1,0 +1,7 @@
+
+debian ldap phpldapadmin shell 
+==> Wait completed after 4 minutes 44 seconds
+==> Builds finished. The artifacts of successful builds are:
+--> amazon-ebs.example: AMIs were created:
+us-east-1: ami-05e7439251b6cfc1e
+

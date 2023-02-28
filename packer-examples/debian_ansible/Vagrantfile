@@ -1,0 +1,37 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.synced_folder ".", "/vagrant" 
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 4096
+    vb.cpus = 2
+  end
+
+  config.vm.define "server" do |srv|
+    srv.vm.box = "debian/bullseye64"
+    #srv.vm.network "private_network", ip: "172.30.30.10"
+    srv.vm.network "public_network", bridge: "enp1s0"
+    srv.vm.provision "shell", inline: $install_ssh_pubkey_script_debian
+
+  end
+
+#  (1..3).each do |i|
+#    config.vm.define "worker#{i}" do |wk|
+#      #wk.vm.box = "generic/alpine38"
+#      wk.vm.box = "debian/bullseye64"
+#      #wk.vm.network "private_network", ip: "172.30.30.#{i+10}"
+#      wk.vm.network "public_network", bridge: "enp1s0"
+#      wk.vm.provision "shell", inline: $install_ssh_pubkey_script_debian
+#    end
+#  end 
+end
+
+$install_ssh_pubkey_script_debian = <<SCRIPT
+sudo useradd -m -s /bin/bash ansible
+sudo mkdir /home/ansible/.ssh
+sudo cp /vagrant/ansible_key.pub /home/ansible/.ssh/authorized_keys
+sudo chown -R ansible.ansible /home/ansible/.ssh/
+sudo bash  -c 'echo "ansible ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ansible'
+SCRIPT

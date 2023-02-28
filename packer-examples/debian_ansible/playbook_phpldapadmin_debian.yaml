@@ -1,0 +1,55 @@
+---
+- name: Install phpldapadmin 
+  hosts: servernet
+  become: true  
+  tasks:
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Installing phpLdapAdmin
+
+    - name: Install packages and dependencies
+      ansible.builtin.apt:
+        pkg:
+        - php-xml 
+        - apache2 
+        - tree
+        - nmap
+        - vim   
+        update_cache: yes
+
+    - name: Install a .deb package from the internet
+      ansible.builtin.apt:
+        deb: http://ftp.de.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.2_all.deb
+
+    - name: Copy the config.php file
+      ansible.builtin.copy:
+        src: /home/images/ansible/ansible_ldap/config.php
+        dest: /etc/phpldapadmin/config.php
+
+    - name: Copy the phpldapadmin.conf file
+      ansible.builtin.copy:
+        src: /home/images/ansible/ansible_ldap/phpldapadmin.conf
+        dest: /etc/apache2/conf-enabled/phpldapadmin.conf
+          
+    - name: Create dynamic configuration
+      ansible.builtin.command: slaptest -f /etc/ldap/slapd.conf -F /etc/ldap/slapd.d
+      ignore_errors: yes
+
+    - name: Start service slapd, if not started
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
+
+#$install_phpldapadmin_script_debian = <<SCRIPT
+#sudo apt-get update
+#sudo apt-get -y install php-xml apache2
+#wget http://ftp.de.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.2_all.deb
+##sudo apt-get -y install http://ftp.de.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.2_all.deb
+#sudo apt-get -y install ./phpldapadmin_1.2.6.3-0.2_all.deb
+#sudo cp /vagrant/phpldapadmin/phpldapadmin.conf /etc/apache2/conf-enabled/phpldapadmin.conf
+#sudo cp /vagrant/phpldapadmin/config.php  /etc/phpldapadmin/config.php
+#sudo bash -c "echo 192.168.1.41 ldap.edt.org >> /etc/hosts"
+#sudo bash -c "echo $ldap_ip ldap.edt.org" >> /tmp/hosts
+#sudo systemctl start apache2
+#SCRIPT
+

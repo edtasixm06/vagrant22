@@ -1,0 +1,74 @@
+    - name: Install LDAP client package
+      ansible.builtin.apt:
+        name: ldap-utils
+        state: present
+        update_cache: yes
+
+    - name: Install LDAP server package
+      ansible.builtin.apt:
+        name: slapd
+        state: present  
+
+    - name: Install package utilities
+      ansible.builtin.apt:
+        pkg:
+        - tree
+        - nmap
+        - vim
+
+    - name: Recursively remove directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop: 
+        - /etc/ldap/slapd.d
+        - /var/lib/ldap
+
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - /etc/ldap/slapd.d
+        - /var/lib/ldap
+
+    - name: Copy the slapd.conf file
+      ansible.builtin.copy:
+        src: ./slapd.conf
+        dest: /etc/ldap/slapd.conf
+
+    - name: Copy the edt.org file
+      ansible.builtin.copy:
+        src: ./edt-org.ldif
+        dest: /etc/ldap/edt-org.ldif
+          
+    - name: Create dynamic configuration
+      ansible.builtin.command: slaptest -f /etc/ldap/slapd.conf -F /etc/ldap/slapd.d
+      ignore_errors: yes
+
+    - name: Populate ans list
+      ansible.builtin.command: "{{ item }}"
+      ignore_errors: yes
+      loop:
+        - slaptest -f /etc/ldap/slapd.conf -F /etc/ldap/slapd.d -u
+        - slapadd  -F /etc/ldap/slapd.d -l /etc/ldap/edt-org.ldif
+        - slapcat 
+
+    - name: Recursively change ownership 
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        recurse: yes
+        owner: openldap
+        group: openldap
+      loop: [ /etc/ldap/slapd.d, /var/lib/ldap ]
+      #loop:
+        #- /etc/ldap/slapd.d
+        #- /var/lib/ldap
+
+    - name: Start service httpd, if not started
+      ansible.builtin.service:
+        name: slapd
+        state: restarted
+
