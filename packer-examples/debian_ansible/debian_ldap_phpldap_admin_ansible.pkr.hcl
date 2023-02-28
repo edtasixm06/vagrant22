@@ -36,36 +36,6 @@ source "amazon-ebs" "example" {
 build {
   sources = ["source.amazon-ebs.example"]
 
-  provisioner "file" {
-    destination = "/tmp/DB_CONFIG"
-    source      = "./DB_CONFIG"
-  }
-
-  provisioner "file" {
-    destination = "/tmp/edt-org.ldif"
-    source      = "./edt-org.ldif"
-  }
-
-  provisioner "file" {
-    destination = "/tmp/ldap.conf"
-    source      = "./ldap.conf"
-  }
-
-  provisioner "file" {
-    destination = "/tmp/slapd.conf"
-    source      = "./slapd.conf"
-  }
-
-  provisioner "file" {
-    destination = "/tmp/phpldapadmin.conf"
-    source      = "./phpldapadmin.conf"
-  }
-
-  provisioner "file" {
-    destination = "/tmp/config.php"
-    source      = "./config.php"
-  }
-
   provisioner "shell" {
     inline = [
       "sleep 30",
@@ -73,9 +43,9 @@ build {
       "sudo apt-get install -y tree nmap vim ",
     ]
   }
-
-  provisioner "shell" {
-    script = "./script.sh"
+  
+  provisioner "ansible" {
+    playbook_file = "./playbook_packer.yaml"
   }
 
 }

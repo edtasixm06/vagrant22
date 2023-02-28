@@ -72,29 +72,12 @@
         owner: openldap
         group: openldap
       loop: [ /etc/ldap/slapd.d, /var/lib/ldap ]
-      #loop:
-        #- /etc/ldap/slapd.d
-        #- /var/lib/ldap
 
-    - name: Start service httpd, if not started
+    - name: Restart service slapd, if not started
       ansible.builtin.service:
         name: slapd
         state: restarted
 
-# Configuració BD edt.org ----------------------------------
-# rm -rf /etc/ldap/slapd.d/*
-# rm -rf /var/lib/ldap/*
-# slaptest -f /opt/docker/slapd.conf -F /etc/ldap/slapd.d
-# slapadd  -F /etc/ldap/slapd.d -l /opt/docker/edt-org.ldif
-# slapcat    
-# chown -R openldap.openldap /etc/ldap/slapd.d /var/lib/ldap
-# /usr/sbin/slapd -d0 
-# -----------------------------------------------------------
-#---
-- name: Install phpldapadmin 
-  hosts: servernet
-  become: true  
-  tasks:
     - name: Print message
       ansible.builtin.debug:
         msg: Installing phpLdapAdmin
@@ -127,17 +110,4 @@
       ansible.builtin.service:
         name: apache2
         state: restarted
-
-#$install_phpldapadmin_script_debian = <<SCRIPT
-#sudo apt-get update
-#sudo apt-get -y install php-xml apache2
-#wget http://ftp.de.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.2_all.deb
-##sudo apt-get -y install http://ftp.de.debian.org/debian/pool/main/p/phpldapadmin/phpldapadmin_1.2.6.3-0.2_all.deb
-#sudo apt-get -y install ./phpldapadmin_1.2.6.3-0.2_all.deb
-#sudo cp /vagrant/phpldapadmin/phpldapadmin.conf /etc/apache2/conf-enabled/phpldapadmin.conf
-#sudo cp /vagrant/phpldapadmin/config.php  /etc/phpldapadmin/config.php
-#sudo bash -c "echo 192.168.1.41 ldap.edt.org >> /etc/hosts"
-#sudo bash -c "echo $ldap_ip ldap.edt.org" >> /tmp/hosts
-#sudo systemctl start apache2
-#SCRIPT
 
