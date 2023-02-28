@@ -39,3 +39,7 @@
       ansible.builtin.shell:  epoptes-client -c  "{{ aules[aula_default].fqdn }}"
       ignore_errors: true
 
+    - name: Restart epoptes-client service
+      ansible.builtin.service:
+        name: epoptes-client
+        state: restarted
