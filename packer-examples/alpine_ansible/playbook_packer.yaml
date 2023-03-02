@@ -1,0 +1,90 @@
+---
+- name: Install LDAP server with edt.org database
+  hosts: default
+  become: true  
+  vars_files:
+  - vars_alpine.yaml
+  tasks:
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Installing LDAP
+
+    - name: Install LDAP client package
+      community.general.apk:
+        name: "{{ alpine_ldap_packages }}" 
+        state: latest
+        update_cache: yes
+
+    - name: Recursively remove directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop: "{{ alpine_ldap_directories }}"
+
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ alpine_ldap_directories }}"
+
+    - name: Copy the slapd.conf file
+      ansible.builtin.copy:
+        src: "{{ alpine_ldap_slapd.source }}"
+        dest: "{{ alpine_ldap_slapd.destination }}"
+
+    - name: Copy the edt.org file
+      ansible.builtin.copy:
+        src: "{{ alpine_ldap_ldif.source }}"
+        dest: "{{ alpine_ldap_ldif.destination }}"
+
+    - name: Populate and list
+      ansible.builtin.command: slapadd  -l "{{ alpine_ldap_ldif.destination }}"
+      ignore_errors: yes
+
+    - name: Recursively change ownership 
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        recurse: yes
+        owner: "{{ alpine_ldap_user }}"
+        group: "{{ alpine_ldap_user }}"
+      loop: "{{ alpine_ldap_directories }}"
+
+    - name: Enable service slapd, if not started
+      ansible.builtin.service:
+        name: slapd
+        state: enabled
+
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Installing phpLdapAdmin
+
+    - name: Install php apache and phpldapadmin packages
+      community.general.apk:
+        name: "{{ alpine_phpldapadmin_packages }}"
+        state: latest
+        update_cache: yes
+
+    - name: Copy the config.php file
+      ansible.builtin.copy:
+        src: "{{ alpine_phpldapadmin_config.source}}" 
+        dest: "{{ alpine_phpldapadmin_config.destination }}"
+
+    - name: Copy the phpldapadmin.conf file
+      ansible.builtin.copy:
+        src: "{{ alpine_phpldapadmin_phpldapadmin_conf.source }}"
+        dest: "{{ alpine_phpldapadmin_phpldapadmin_conf.destination }}"
+
+    - name: Recursively change ownership
+      ansible.builtin.file:
+        path: "{{ alpine_phpldapadmin_config }}"
+        state: directory
+        recurse: yes
+        owner: "{{ alpine_phpldapadmin_user }}"
+        group: "{{ alpine_phpldapadmin_user }}"
+
+    - name: Enable service apache2 
+      ansible.builtin.service:
+        name: apache2
+        state: enabled
