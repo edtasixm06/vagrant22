@@ -1,11 +1,13 @@
-# Vagrant / Ansible
+# Vagrant / Ansible / Packer
 ## ASIX M14-Projectes  @edt Curs 2022-2023
 
 #### Continguts
 
- * **vagrant_examples** exemples de funcionament de vagrant.
+ * **vagrant_examples** Exemples de funcionament de Vagrant.
 
- * **ansible_examples** exemples de de funcionament d'Andible.
+ * **ansible_examples** Exemples de de funcionament d'Ansible.
+ 
+ * **packer_examples** Exemples de funcionament de Packer.
 
 
 
