@@ -1,0 +1,15 @@
+AWS
+alpine-3.15.4-x86_64-bios-tiny-r0
+ami-032ecf83bf69d54f8
+Alpine Linux 3.15.4 - https://alpinelinux.org/cloud
+Plataforma: Other Linux
+Arquitectura: x86_64
+Propietario: 538276064493
+Fecha de publicación: 2022-04-05
+Tipo de dispositivo raíz: ebs
+Virtualización: hvm
+Habilitado para ENA: Sí
+Modo de arranque: legacy-bios
+
+
+
