@@ -1,18 +1,18 @@
-alpine_ldap_packages: [ tree, nmap, vim, openldap-back-mdb, openldap-back-monitor, openldap, openldap-clients ]
+alpine_ldap_packages: [ tree, nmap, vim, openldap, openldap-back-mdb, openldap-back-monitor ]
 alpine_ldap_directories: [ /etc/ldap/slapd.d, /var/lib/openldap ]
 alpine_ldap_user: ldap
 alpine_ldap_slapd:
-  source: ./slapd.conf
+  source: ./slapd_alpine.conf
   destination: /etc/openldap/slapd.conf
 alpine_ldap_ldif:
   source: ./edt-org.ldif
   destination:  /etc/openldap/edt-org.ldif
-alpine_phpldapadmin_packages: [ apache2, php-apache2, phpldapadmin ]
+alpine_phpldapadmin_packages: [ apache2, php5-apache2, phpldapadmin ]
 alpine_phpldapadmin_config:
   source: ./config.php
   destination: /etc/phpldapadmin/config.php
 alpine_phpldapadmin_phpldapadmin_conf:
-  source: ./phpldapadmin.conf
+  source: ./phpldapadmin_alpine.conf
   destination: /etc/apache2/conf.d/phpldapadmin.conf
 alpine_phpldapadmin_user: apache
 

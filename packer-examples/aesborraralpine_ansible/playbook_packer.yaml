@@ -1,8 +1,7 @@
 ---
 - name: Install LDAP server with edt.org database
   hosts: default
-  become: true 
-  become_method: doas 
+  become: true  
   vars_files:
   - vars_alpine.yaml
   tasks:
@@ -53,7 +52,9 @@
       loop: "{{ alpine_ldap_directories }}"
 
     - name: Enable service slapd, if not started
-      ansible.builtin.command: rc-update add slapd
+      ansible.builtin.service:
+        name: slapd
+        state: enabled
 
     - name: Print message
       ansible.builtin.debug:
@@ -84,5 +85,6 @@
         group: "{{ alpine_phpldapadmin_user }}"
 
     - name: Enable service apache2 
-      ansible.builtin.command: rc-update add apache2
-
+      ansible.builtin.service:
+        name: apache2
+        state: enabled
