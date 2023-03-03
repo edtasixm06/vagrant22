@@ -1,4 +1,4 @@
-$ ssh -i ~/.aws/labuser.pem -f -N -R 3389:ldap.escoladeltreball.org:389 admin@107.23.121.205
+$ ssh -i ~/.aws/labuser.pem -f -N -R 3389:ldap.escoladeltreball.org:389 admin@A.B.C.D
 $ cat /etc/hosts
 127.0.0.1 localhost ldap.escoladeltreball.org
 
