@@ -1,0 +1,97 @@
+---
+- name: Post Install Aula (F2G)
+  hosts: default
+  become: true 
+  vars_files:
+    - vars.yaml
+    - vars_epoptes.yaml 
+  tasks:
+    - name: Install packages initial
+      ansible.builtin.apt:
+        name: "{{ aula.packages.initial }}"
+        state: latest
+        update_cache: yes
+
+    - name: Remove packages
+      ansible.builtin.apt:
+        name: "{{ aula.packages.remove }}"
+        state: absent
+
+    - name: Remove dependencies that are no longer required
+      ansible.builtin.apt:
+        autoremove: yes
+
+    - name: Install packages second
+      ansible.builtin.apt:
+        name: "{{ aula.packages.second }}"
+        state: latest
+        update_cache: yes
+          
+    - name: Copy configuration files sssd.conf
+      ansible.builtin.copy:
+        src: "{{ aula.files.sssd.source }}"
+        dest: "{{ aula.files.sssd.destination}}" 
+        owner: root
+        group: root
+        mode: '0600'
+      ignore_errors: true
+
+    - name: Copy file sudoers.d inf
+      ansible.builtin.copy:
+        src: "{{ aula.files.sudoers.source }}"
+        dest: "{{ aula.files.sudoers.destination }}"
+        owner: root
+        group: root
+      ignore_errors: true   
+
+    - name: Pam Auth Update
+      ansible.builtin.command: "{{ aula.pam_cmd }}"
+
+    - name: Disable services 
+      ansible.builtin.service:
+        name: "{{ item }}"
+        enabled: no
+      loop: "{{ aula.services.disable }}"
+
+    - name: Enable services
+      ansible.builtin.service:
+        name: "{{ item }}"
+        enabled: yes
+      loop: "{{ aula.services.enable }}"
+
+    - name: Install packages third
+      ansible.builtin.apt:
+        name: "{{ aula.packages.third }}"
+        state: latest
+        update_cache: yes
+        
+    - name: Add contrib and nonfree to all repos
+      ansible.builtin.apt_repository:
+        filename: inf
+        repo: "{{ item }}"
+        state: present
+      loop: "{{ aula.repos }}"
+
+    - name: Install packages (contrib non-free)
+      ansible.builtin.apt:
+        name: "{{ aula.packages.contrib_nonfree }}"
+        state: latest
+        update_cache: true
+
+    - name: Install kernel headers 
+      ansible.builtin.apt:
+        name: linux-headers-{{ ansible_kernel }}
+        state: latest
+
+    - name: Hold apt-get and aptitude automatic updates linux-headers and linux-images          
+      ansible.builtin.shell: "{{ item }}"
+      loop: "{{ aula.hold }} "
+
+    - name: Replace  WaylandEnable  
+      ansible.builtin.replace:
+        path: /etc/hosts
+        regexp: '#WaylandEnable=false'
+        replace: 'WaylandEnable=false'
+
+    - include_tasks: ./part_playbook_epoptes.yaml
+

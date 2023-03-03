@@ -1,0 +1,14 @@
+aules:
+  default: profef2g
+  profef2g:
+    name: profef2g
+    ip: 10.200.247.247
+    fqdn: profef2g.informatica.escoladeltreball.org
+    entry: "10.200.247.247 profef2g.informatica.escoladeltreball.org server"
+  profen2i:
+    name: profen2i
+    ip: 10.200.247.243
+    fqdn: profen2i.informatica.escoladeltreball.org
+    entry: "10.200.247.243 profen2i.informatica.escoladeltreball.org server"
+aula_default: profef2g
+
